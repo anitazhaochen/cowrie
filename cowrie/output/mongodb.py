@@ -41,16 +41,16 @@ class Output(cowrie.core.output.Output):
             self.mongo_client = pymongo.MongoClient(db_addr)
             self.mongo_db = self.mongo_client[db_name]
             # Define Collections.
-            self.col_sensors = self.mongo_db['sensors']
-            self.col_sessions = self.mongo_db['sessions']
-            self.col_auth = self.mongo_db['auth']
-            self.col_input = self.mongo_db['input']
-            self.col_downloads = self.mongo_db['downloads']
-            self.col_input = self.mongo_db['input']
-            self.col_clients = self.mongo_db['clients']
-            self.col_ttylog = self.mongo_db['ttylog']
-            self.col_keyfingerprints = self.mongo_db['keyfingerprints']
-            self.col_event = self.mongo_db['event']
+            self.col_sensors = self.mongo_db['cowsensors']
+            self.col_sessions = self.mongo_db['cowsessions']
+            self.col_auth = self.mongo_db['cowauths']
+            self.col_input = self.mongo_db['cowinputs']
+            self.col_downloads = self.mongo_db['cowdownloads']
+            self.col_clients = self.mongo_db['cowclients']
+            self.col_ttylog = self.mongo_db['cowttylogs']
+            self.col_keyfingerprints = self.mongo_db['cowkeyfingerprints']
+            self.col_event = self.mongo_db['cowevents']
+            self.co_event = self.mongo_db['events']
         except Exception as e:
             log.msg('output_mongodb: Error: %s' % str(e))
 
@@ -88,6 +88,18 @@ class Output(cowrie.core.output.Output):
             self.insert_one(self.col_sessions, entry)
 
         elif eventid in ['cowrie.login.success', 'cowrie.login.failed']:
+
+            new_entry = {}
+            new_entry['host'] = 'ssh 蜜罐'
+            new_entry['source'] = entry['src_ip']
+            new_entry['message'] = entry['message']
+            new_entry['channel'] = 'instant'
+            new_entry['timestamp'] = entry['time']
+            new_entry['type'] = 'attacked'
+            new_entry['level'] = 'yellow'
+            new_entry['position'] = 'outside'
+
+            self.insert_one(self.co_event,new_entry)
             self.insert_one(self.col_auth, entry)
 
         elif eventid in ['cowrie.command.input', 'cowrie.command.failed']:
