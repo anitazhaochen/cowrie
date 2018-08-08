@@ -169,8 +169,8 @@ class Output(object):
         ev['sensor'] = self.sensor
 
         # Add ISO timestamp and sensor data
-        if 'time' not in ev:
-            ev['timestamp'] = time.time()
+        #if 'time' not in ev:
+        ev['timestamp'] = time.time()
         ev['time'] = datetime.datetime.fromtimestamp(ev['timestamp']).isoformat() + 'CN'
 
         if 'format' in ev and ('message' not in ev or ev['message'] == ()):
