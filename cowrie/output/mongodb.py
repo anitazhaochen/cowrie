@@ -90,13 +90,13 @@ class Output(cowrie.core.output.Output):
         elif eventid in ['cowrie.login.success', 'cowrie.login.failed']:
 
             new_entry = {}
-            new_entry['host'] = 'ssh 蜜罐'
+            new_entry['host'] = '高交互蜜罐'
             new_entry['source'] = entry['src_ip']
             new_entry['message'] = entry['message']
             new_entry['channel'] = 'instant'
             new_entry['timestamp'] = entry['time']
-            new_entry['type'] = 'attacked'
-            new_entry['level'] = 'yellow'
+            new_entry['type'] = 'intrude'
+            new_entry['level'] = 'orange'
             new_entry['position'] = 'outside'
 
             self.insert_one(self.co_event,new_entry)
